@@ -20,38 +20,34 @@ SWEP.DrawAmmo				= false
 SWEP.Category 				= "Admin"
 SWEP.Primary.Delay			= .5
 
-function SWEP:Initialize()
-	self:SendWeaponAnim(ACT_VM_HOLSTER)
-end
+SWEP.SearchRadius = 5
 
-local ropeowners = {}
-
-function SWEP:DoHitEffects()
-
-end
-
+-- You could even expand this to be a general entity search tool
+SWEP.SearchEntities = {
+	keyframe_rope = true,
+	phys_lengthconstraint = true
+}
 
 function SWEP:PrimaryAttack()	
-	ropeowners = {}
 	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
-	local trace = self.Owner:GetEyeTraceNoCursor();
-	if (trace.Hit or trace.HitWorld) then
-		local entities = ents.FindInSphere( trace.HitPos, 5	)
-		if entities != nil then
-			for k,v in pairs(entities) do
-				if v:GetClass() == ("keyframe_rope" or "phys_lengthconstraint") then
-					ropeowners[v] = v:GetOwner()
-				end
-			end
-			for k,v in pairs (ropeowners)do
-				if v:IsValid() then
-					self.Owner:ChatPrint("Owner: ".. v:Nick())
-				else
-					self.Owner:ChatPrint("This rope does not have an owner")
-				end
-			end
+	local pPlayer = self:GetOwner()
+	
+	if pPlayer ~= NULL then
+		return false
+	end
+	
+	local entities = ents.FindInSphere(self.Owner:GetEyeTrace().HitPos, self.SearchRadius)
+	for i = 1, #entities do
+		local pRope = entities[i]
+		local sClass = pRope:GetClass()
+		
+		if self.SearchEntities[sClass] then
+			local pOwner = pRope:GetOwner()
+			pPlayer:ChatPrint(pOwner:IsPlayer() and string.format("%q owns this %s", pOwner:Nick(), sClass)
+				or "This rope has no owner!")
 		end
 	end
+	return true
 end
 
 
