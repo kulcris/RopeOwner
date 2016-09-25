@@ -50,7 +50,7 @@ function SWEP:PrimaryAttack()
 	return true
 end
 
-
+ 
 if CLIENT then
 
 	
