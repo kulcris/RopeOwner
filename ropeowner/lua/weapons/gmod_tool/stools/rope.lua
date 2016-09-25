@@ -55,8 +55,10 @@ function TOOL:LeftClick( trace )
 			undo.AddEntity( rope )
 			undo.SetPlayer( self:GetOwner() )
 		undo.Finish()
+		-- Set the rope's owner
 		if ( IsValid( rope ) ) then rope:SetOwner(self:GetOwner()) end
 		if ( IsValid( constraint ) ) then constraint:SetOwner(self:GetOwner())  end
+		
 		self:GetOwner():AddCleanup( "ropeconstraints", constraint )
 		self:GetOwner():AddCleanup( "ropeconstraints", rope )
 
@@ -117,8 +119,10 @@ function TOOL:RightClick( trace )
 			if ( IsValid( rope ) ) then undo.AddEntity( rope ) end
 			undo.SetPlayer( self:GetOwner() )
 		undo.Finish()
-		if ( IsValid( rope ) ) then rope:SetOwner(self:GetOwner()) print(rope:GetOwner()) end
-		if ( IsValid( constraint ) ) then constraint:SetOwner(self:GetOwner()) print(constraint:GetOwner()) end
+		-- Set the rope's owner
+		if ( IsValid( rope ) ) then rope:SetOwner(self:GetOwner())  end
+		if ( IsValid( constraint ) ) then constraint:SetOwner(self:GetOwner()) end
+		
 		self:GetOwner():AddCleanup( "ropeconstraints", constraint )
 		self:GetOwner():AddCleanup( "ropeconstraints", rope )
 
