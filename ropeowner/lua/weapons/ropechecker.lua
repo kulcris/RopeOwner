@@ -32,7 +32,7 @@ function SWEP:PrimaryAttack()
 	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 	local pPlayer = self:GetOwner()
 	
-	if pPlayer ~= NULL then
+	if pPlayer == NULL then
 		return false
 	end
 	
